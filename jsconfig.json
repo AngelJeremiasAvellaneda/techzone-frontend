@@ -1,7 +1,14 @@
+// jsconfig.json
+
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/views/*": ["./src/views/*"],
+      "@/models/*": ["./src/models/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
