@@ -1,26 +1,38 @@
-// src/models/hooks/useToast.js
+// /models/hooks/useToast.js
 'use client';
 
-import { toast } from 'react-hot-toast';
+import { useState, useCallback } from 'react';
 
-export function useToast() {
-  const showToast = (message, type = 'success') => {
-    switch (type) {
-      case 'success':
-        toast.success(message);
-        break;
-      case 'error':
-        toast.error(message);
-        break;
-      case 'warning':
-        toast(message, {
-          icon: '⚠️',
-        });
-        break;
-      default:
-        toast(message);
+export const useToast = () => {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback((message, type = 'info', duration = 5000) => {
+    const id = `toast_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const newToast = {
+      id,
+      message,
+      type,
+      duration,
+    };
+
+    setToasts(prev => [...prev, newToast]);
+
+    // Auto-remove toast after duration
+    if (duration > 0) {
+      setTimeout(() => {
+        setToasts(prev => prev.filter(toast => toast.id !== id));
+      }, duration);
     }
-  };
+  }, []);
 
-  return { showToast };
-}
+  const hideToast = useCallback((id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  }, []);
+
+  return {
+    toasts,
+    showToast,
+    hideToast,
+  };
+};

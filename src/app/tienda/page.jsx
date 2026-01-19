@@ -1,81 +1,142 @@
-// src/app/tienda/page.jsx
-import Link from 'next/link';
-import { Laptop, Monitor, Headphones } from 'lucide-react';
+'use client';
 
-export const metadata = {
-  title: 'Tienda | TechZone',
-  description: 'Explora todos nuestros productos tecnológicos',
-};
+import { useState, useEffect } from 'react';
+import BaseLayout from '@/views/layouts/BaseLayout';
+import ProductsLayout from '@/views/layouts/ProductsLayout';
+import { useProducts } from '@/models/hooks/useProducts';
 
-export default function Tienda() {
-  const categories = [
-    {
-      name: 'Laptops',
-      icon: Laptop,
-      href: '/tienda/laptops',
-      description: 'Portátiles de última generación',
-      color: 'from-blue-500 to-purple-500'
-    },
-    {
-      name: 'Desktops',
-      icon: Monitor,
-      href: '/tienda/desktops',
-      description: 'Computadoras de escritorio potentes',
-      color: 'from-green-500 to-teal-500'
-    },
-    {
-      name: 'Accesorios',
-      icon: Headphones,
-      href: '/tienda/accessories',
-      description: 'Periféricos y complementos',
-      color: 'from-orange-500 to-red-500'
-    }
+export default function TiendaPage() {
+  const { products, loading, error } = useProducts();
+  const [allProducts, setAllProducts] = useState([]);
+
+  // Datos de ejemplo para categorías
+  const subcategories = [
+    { id: 'laptops', name: 'Laptops', slug: 'laptops' },
+    { id: 'desktops', name: 'Computadoras', slug: 'desktops' },
+    { id: 'accesories', name: 'Accesorios', slug: 'accesories' },
   ];
 
-  return (
-    <div className="min-h-screen pt-20 pb-12 px-4 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Nuestra Tienda</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-          Explora nuestras categorías y encuentra el producto perfecto para ti.
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {categories.map((category) => {
-            const Icon = category.icon;
-            return (
-              <Link
-                key={category.name}
-                href={category.href}
-                className="group relative overflow-hidden rounded-2xl bg-gradient-to-br via-transparent p-8 hover:scale-[1.02] transition-transform"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
-                <div className="relative z-10">
-                  <Icon className="w-16 h-16 mb-6 text-gray-900 dark:text-white" />
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{category.name}</h2>
-                  <p className="text-gray-600 dark:text-gray-400">{category.description}</p>
-                  <div className="mt-6 flex items-center text-purple-600 dark:text-purple-400 group-hover:text-purple-700 dark:group-hover:text-purple-300">
-                    <span>Ver productos</span>
-                    <span className="ml-2 transform group-hover:translate-x-2 transition-transform">→</span>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+  useEffect(() => {
+    if (products && products.length > 0) {
+      setAllProducts(products);
+    } else {
+      // Datos de ejemplo si no hay conexión
+      setAllProducts([
+        {
+          id: 1,
+          name: 'Laptop Gamer Asus ROG',
+          description: 'Laptop gaming con procesador Intel i7, 16GB RAM, RTX 3060',
+          price: 4599,
+          brand: 'Asus',
+          category: 'Laptops',
+          subcategory: 'laptops',
+          image: '/images/laptop.jpg',
+          stock: 5,
+          discount: 10,
+          specs: ['Gaming', '16GB RAM', 'RTX 3060']
+        },
+        {
+          id: 2,
+          name: 'PC Gamer Intel i9',
+          description: 'Computadora de escritorio para gaming y trabajo',
+          price: 6999,
+          brand: 'Intel',
+          category: 'Computadoras',
+          subcategory: 'desktops',
+          image: '/images/pc-gamer.jpg',
+          stock: 3,
+          discount: 15,
+          specs: ['Intel i9', '32GB RAM', 'RTX 4070']
+        },
+        {
+          id: 3,
+          name: 'Mouse Gaming Logitech',
+          description: 'Mouse RGB con 8 botones programables',
+          price: 199,
+          brand: 'Logitech',
+          category: 'Accesorios',
+          subcategory: 'accesories',
+          image: '/images/mouse.jpg',
+          stock: 20,
+          discount: 5,
+          specs: ['RGB', 'Programmable', 'Gaming']
+        },
+        {
+          id: 4,
+          name: 'Teclado Mecánico Redragon',
+          description: 'Teclado mecánico switches azules, RGB',
+          price: 299,
+          brand: 'Redragon',
+          category: 'Accesorios',
+          subcategory: 'accesories',
+          image: '/images/keyboard.jpg',
+          stock: 15,
+          discount: 0,
+          specs: ['Mechanical', 'RGB', 'Blue Switches']
+        },
+        {
+          id: 5,
+          name: 'Monitor 27" 144Hz',
+          description: 'Monitor gaming 144Hz, 1ms, FreeSync',
+          price: 1599,
+          brand: 'AOC',
+          category: 'Accesorios',
+          subcategory: 'accesories',
+          image: '/images/monitor.jpg',
+          stock: 8,
+          discount: 12,
+          specs: ['144Hz', '1ms', 'FreeSync']
+        },
+        {
+          id: 6,
+          name: 'Laptop HP Pavilion',
+          description: 'Laptop para trabajo y estudio',
+          price: 2999,
+          brand: 'HP',
+          category: 'Laptops',
+          subcategory: 'laptops',
+          image: '/images/laptop-hp.jpg',
+          stock: 12,
+          discount: 8,
+          specs: ['i5', '8GB RAM', '512GB SSD']
+        }
+      ]);
+    }
+  }, [products]);
 
-        <div className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Productos Destacados</h2>
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Nuestros productos destacados estarán disponibles próximamente
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-500">
-              Estamos preparando las mejores ofertas para ti
-            </p>
+  if (loading) {
+    return (
+      <BaseLayout>
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </BaseLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <BaseLayout>
+        <div className="min-h-screen pt-24 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-500 mb-4">Error al cargar productos</div>
+            <p className="text-gray-600 dark:text-gray-400">{error}</p>
           </div>
         </div>
+      </BaseLayout>
+    );
+  }
+
+  return (
+    <BaseLayout>
+      <div className="min-h-screen pt-24 pb-12">
+        <ProductsLayout 
+          title="Tienda TechZone"
+          products={allProducts}
+          subcategories={subcategories}
+          category="all"
+        />
       </div>
-    </div>
+    </BaseLayout>
   );
 }
