@@ -11,6 +11,7 @@ import {
   Filter, X, ShoppingCart,
   ChevronUp, ChevronDown, SortAsc, SortDesc
 } from "@/components/icons";
+import BaseLayout from '@/views/layouts/BaseLayout';
 
 export default function ProductsLayout({ 
   title, 
@@ -125,7 +126,7 @@ export default function ProductsLayout({
   };
 
   return (
-    <>
+    <BaseLayout>
       {/* Encabezado */}
       <section className="mt-6 px-4 sm:px-6 lg:px-8 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div className="max-w-7xl mx-auto">
@@ -156,7 +157,6 @@ export default function ProductsLayout({
           </div>
         </div>
       </section>
-
       {/* Main */}
       <main className="px-4 sm:px-6 lg:px-8 relative lg:flex lg:gap-8 mt-4">
         <div className="max-w-7xl mx-auto w-full">
@@ -401,6 +401,6 @@ export default function ProductsLayout({
           </div>
         </div>
       </main>
-    </>
+    </BaseLayout>
   );
 }

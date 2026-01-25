@@ -8,52 +8,42 @@ export const metadata = {
   description: 'Encuentra las mejores laptops para gaming, trabajo y estudio',
 };
 
+// 🔗 BACKEND URL
+const API_URL = 'http://localhost:8080/api/items';
+
 async function getLaptops() {
-  // TODO: Reemplazar con llamada a tu API
-  // Por ahora datos de ejemplo
-  return [
-    { 
-      id: 1, 
-      name: 'Laptop Gaming Pro', 
-      price: 1299.99, 
-      image: '/images/resources/feature1.png',
-      brand: 'ASUS',
-      category: 'laptops',
-      subcategory: 'gaming',
-      description: 'Potente laptop para gaming con RTX 4070'
-    },
-    { 
-      id: 2, 
-      name: 'Laptop Ultrabook', 
-      price: 899.99, 
-      image: '/images/resources/feature2.png',
-      brand: 'Dell',
-      category: 'laptops',
-      subcategory: 'ultrabook',
-      description: 'Ultrabook ligero para trabajo y estudio'
-    },
-    { 
-      id: 3, 
-      name: 'Laptop Business', 
-      price: 1099.99, 
-      image: '/images/resources/feature3.png',
-      brand: 'HP',
-      category: 'laptops',
-      subcategory: 'business',
-      description: 'Laptop empresarial con máxima seguridad'
-    },
-  ];
+  const res = await fetch(API_URL, {
+    cache: 'no-store', // importante en Next App Router
+  });
+
+  if (!res.ok) {
+    throw new Error('Error al cargar productos');
+  }
+
+  const items = await res.json();
+
+  // 🔄 Adaptar backend → frontend
+  return items.map(item => ({
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    description: item.description,
+    image: '/images/resources/feature1.png', // temporal
+    brand: 'TechZone', // temporal
+    category: 'laptops',
+    subcategory: 'general',
+  }));
 }
 
 async function getSubcategories() {
-  // TODO: Reemplazar con llamada a tu API
+  // por ahora fijo, luego viene de categories
   return ['gaming', 'ultrabook', 'business', 'convertible'];
 }
 
 export default async function Laptops() {
   const [products, subcategories] = await Promise.all([
     getLaptops(),
-    getSubcategories()
+    getSubcategories(),
   ]);
 
   return (

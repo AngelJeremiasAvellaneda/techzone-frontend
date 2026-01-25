@@ -41,5 +41,12 @@ export {
   Filter,
   ChevronUp,
   SortAsc,
-  SortDesc
+  SortDesc,
+  Start,
+  Truck,
+  CreditCard,
+  Headphones,
+  ChevronRight,
+  Zap,
+  Star
 } from 'lucide-react';
