@@ -1,4 +1,4 @@
-// src/app/tienda/laptops/page.jsx
+// src/app/tienda/peripherals/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,27 +6,27 @@ import ProductsLayout from '@/views/layouts/ProductsLayout';
 import LoadingScreen from '@/views/components/LoadingScreen';
 import { itemService } from '@/models/services/itemService';
 
-export default function DesktopsPage() {
+export default function PeripheralsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadDesktops();
+    loadPeripherals();
   }, []);
 
-  const loadDesktops = async () => {
+  const loadPeripherals = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      console.log('🔄 Cargando desktops...');
-      const desktops = await itemService.getDesktops();
+      console.log('🔄 Cargando Peripherals...');
+      const peripherals = await itemService.getPeripherals();
 
-      console.log(`✅ Encontradas ${desktops.length} desktops`);
-      setProducts(desktops);
+      console.log(`✅ Encontradas ${peripherals.length} Peripherals`);
+      setProducts(peripherals);
     } catch (err) {
-      console.error('❌ Error cargando desktops:', err);
+      console.error('❌ Error cargando Peripherals:', err);
       setError(
         'No se pudo conectar con el servidor. Verifica que el backend esté corriendo.'
       );
@@ -37,23 +37,24 @@ export default function DesktopsPage() {
   };
 
   const subcategories = [
-    { label: 'Gaming', categoryId: 12 },
-    { label: 'Workstation', categoryId: 13 }
+    { label: 'Teclados', categoryId: 17},
+    { label: 'Ratones', categoryId: 18},
+    { label: 'Monitores', categoryId: 19}
   ];
 
   if (loading) {
-    return <LoadingScreen message="Cargando desktops..." />;
+    return <LoadingScreen message="Cargando peripherals..." />;
   }
 
   return (
     <ProductsLayout
-      title="Desktops"
+      title="Periféricos"
       products={products}
       subcategories={subcategories}
-      category="desktops"
+      category="peripherals"
       isLoading={loading}
       error={error}
-      onRetry={loadDesktops}
+      onRetry={loadPeripherals}
     />
   );
 }

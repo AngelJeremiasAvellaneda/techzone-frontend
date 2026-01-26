@@ -48,5 +48,6 @@ export {
   Headphones,
   ChevronRight,
   Zap,
-  Star
+  Star,
+  TrendingUp
 } from 'lucide-react';

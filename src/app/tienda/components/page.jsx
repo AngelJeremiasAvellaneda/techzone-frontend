@@ -1,4 +1,4 @@
-// src/app/tienda/laptops/page.jsx
+// src/app/tienda/Accesories/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,27 +6,27 @@ import ProductsLayout from '@/views/layouts/ProductsLayout';
 import LoadingScreen from '@/views/components/LoadingScreen';
 import { itemService } from '@/models/services/itemService';
 
-export default function DesktopsPage() {
+export default function ComponentsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadDesktops();
+    loadComponents();
   }, []);
 
-  const loadDesktops = async () => {
+  const loadComponents = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      console.log('🔄 Cargando desktops...');
-      const desktops = await itemService.getDesktops();
+      console.log('🔄 Cargando Componentes...');
+      const components = await itemService.getComponents();
 
-      console.log(`✅ Encontradas ${desktops.length} desktops`);
-      setProducts(desktops);
+      console.log(`✅ Encontradas ${components.length} Componentes`);
+      setProducts(components);
     } catch (err) {
-      console.error('❌ Error cargando desktops:', err);
+      console.error('❌ Error cargando Componentes:', err);
       setError(
         'No se pudo conectar con el servidor. Verifica que el backend esté corriendo.'
       );
@@ -37,23 +37,24 @@ export default function DesktopsPage() {
   };
 
   const subcategories = [
-    { label: 'Gaming', categoryId: 12 },
-    { label: 'Workstation', categoryId: 13 }
+    { label: 'Procesadores', categoryId: 14},
+    { label: 'Tarjetas gráficas', categoryId: 15},
+    { label: 'Memoria RAM', categoryId: 16 }
   ];
 
   if (loading) {
-    return <LoadingScreen message="Cargando desktops..." />;
+    return <LoadingScreen message="Cargando Componentes..." />;
   }
 
   return (
     <ProductsLayout
-      title="Desktops"
+      title="Componentes"
       products={products}
       subcategories={subcategories}
-      category="desktops"
+      category="componentes"
       isLoading={loading}
       error={error}
-      onRetry={loadDesktops}
+      onRetry={loadComponents}
     />
   );
 }

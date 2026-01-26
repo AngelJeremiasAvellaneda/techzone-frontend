@@ -1,7 +1,7 @@
 // src/constants/routes.js
 export const ROUTES = {
     // Páginas principales
-    HOME: '/',
+    HOME: '/',   
     SHOP: '/tienda',
     ABOUT: '/about',
     CONTACT: '/contact',
@@ -9,8 +9,8 @@ export const ROUTES = {
     // Categorías de productos
     CATEGORY_LAPTOPS: '/tienda/laptops',
     CATEGORY_DESKTOPS: '/tienda/desktops',
-    CATEGORY_ACCESSORIES: '/tienda/accessories',
-    
+    CATEGORY_COMPONENTS: '/tienda/components',
+    CATEGORY_PERIPHERALS: '/tienda/peripherals',
     // Productos
     PRODUCT_DETAIL: (id, slug) => slug ? `/tienda/producto/${id}-${slug}` : `/tienda/producto/${id}`,
     

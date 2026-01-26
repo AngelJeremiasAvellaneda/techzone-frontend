@@ -50,9 +50,14 @@ const mainNav = [
         description: "PCs de escritorio potentes" 
       },
       { 
-        path: ROUTES.CATEGORY_ACCESSORIES, 
-        label: "Accesorios", 
-        description: "Periféricos y más" 
+        path: ROUTES.CATEGORY_COMPONENTS, 
+        label: "Componentes", 
+        description: "Componentes de última generación" 
+      },
+      { 
+        path: ROUTES.CATEGORY_PERIPHERALS, 
+        label: "Periféricos", 
+        description: "Periféricos de alta gama" 
       },
     ]
   },

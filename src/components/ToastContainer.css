@@ -1,0 +1,12 @@
+/* /src/components/ToastContainer.css */
+.toast-progress-bar {
+  animation-name: shrink;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}

@@ -1,8 +1,6 @@
-// src/models/context/CartContext.jsx
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { apiClient } from "@/lib/api-client";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
@@ -10,100 +8,84 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [cartOpen, setCartOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  // Cargar carrito desde API
-  const fetchCart = useCallback(async () => {
-    try {
-      setLoading(true);
-      const cartData = await apiClient.get('/cart');
-      setCart(cartData.items || []);
-      setTotalItems(cartData.totalItems || 0);
-    } catch (error) {
-      console.error("Error al cargar carrito:", error);
-      // Si no hay usuario, usar carrito local
-      if (typeof window !== 'undefined') {
-        const localCart = localStorage.getItem('guest_cart');
-        if (localCart) {
+  // Cargar carrito local (sin API por ahora)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const localCart = localStorage.getItem('guest_cart');
+      if (localCart) {
+        try {
           const parsedCart = JSON.parse(localCart);
           setCart(parsedCart);
           setTotalItems(parsedCart.reduce((sum, item) => sum + item.quantity, 0));
+        } catch (error) {
+          console.error("Error parsing cart:", error);
         }
       }
-    } finally {
-      setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
-
   const addToCart = async (productId, quantity = 1) => {
-    try {
-      const response = await apiClient.post('/cart/add', {
-        productId,
-        quantity,
-      });
-
-      if (response.success) {
-        await fetchCart(); // Refrescar carrito
-        return { success: true };
-      }
-      return { success: false, error: response.error };
-    } catch (error) {
-      console.error("Error al añadir al carrito:", error);
-      return { success: false, error: error.message };
+    // Simulación local sin backend
+    console.log(`Añadiendo producto ${productId}, cantidad: ${quantity}`);
+    
+    const newItem = {
+      id: Date.now(),
+      productId,
+      quantity,
+      name: `Producto ${productId}`,
+      price: 99.99,
+      image: '/placeholder.jpg'
+    };
+    
+    const newCart = [...cart, newItem];
+    setCart(newCart);
+    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
+    
+    // Guardar en localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('guest_cart', JSON.stringify(newCart));
     }
+    
+    return { success: true };
   };
 
   const removeFromCart = async (productId) => {
-    try {
-      const response = await apiClient.delete(`/cart/remove/${productId}`);
-      
-      if (response.success) {
-        await fetchCart();
-        return { success: true };
-      }
-      return { success: false, error: response.error };
-    } catch (error) {
-      console.error("Error al eliminar del carrito:", error);
-      return { success: false, error: error.message };
+    const newCart = cart.filter(item => item.productId !== productId);
+    setCart(newCart);
+    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
+    
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('guest_cart', JSON.stringify(newCart));
     }
+    
+    return { success: true };
   };
 
   const updateQuantity = async (productId, quantity) => {
-    try {
-      const response = await apiClient.put('/cart/update', {
-        productId,
-        quantity,
-      });
-
-      if (response.success) {
-        await fetchCart();
-        return { success: true };
-      }
-      return { success: false, error: response.error };
-    } catch (error) {
-      console.error("Error al actualizar cantidad:", error);
-      return { success: false, error: error.message };
+    const newCart = cart.map(item => 
+      item.productId === productId ? { ...item, quantity } : item
+    );
+    setCart(newCart);
+    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
+    
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('guest_cart', JSON.stringify(newCart));
     }
+    
+    return { success: true };
   };
 
   const clearCart = async () => {
-    try {
-      const response = await apiClient.delete('/cart/clear');
-      
-      if (response.success) {
-        setCart([]);
-        setTotalItems(0);
-        return { success: true };
-      }
-      return { success: false, error: response.error };
-    } catch (error) {
-      console.error("Error al vaciar carrito:", error);
-      return { success: false, error: error.message };
+    setCart([]);
+    setTotalItems(0);
+    
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('guest_cart');
     }
+    
+    return { success: true };
   };
 
   const value = {
@@ -116,7 +98,7 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     updateQuantity,
     clearCart,
-    refreshCart: fetchCart,
+    refreshCart: () => console.log("Refresh cart"),
   };
 
   return (

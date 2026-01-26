@@ -1,59 +1,59 @@
 // src/app/tienda/laptops/page.jsx
+'use client';
+
+import { useState, useEffect } from 'react';
 import ProductsLayout from '@/views/layouts/ProductsLayout';
-import { Suspense } from 'react';
 import LoadingScreen from '@/views/components/LoadingScreen';
+import { itemService } from '@/models/services/itemService';
 
-export const metadata = {
-  title: 'Laptops | TechZone',
-  description: 'Encuentra las mejores laptops para gaming, trabajo y estudio',
-};
+export default function LaptopsPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    loadLaptops();
+  }, []);
 
-// 🔗 BACKEND URL
-const API_URL = 'http://localhost:8080/api/items';
+  const loadLaptops = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-async function getLaptops() {
-  const res = await fetch(API_URL, {
-    cache: 'no-store', // importante en Next App Router
-  });
+      console.log('🔄 Cargando laptops...');
+      const laptops = await itemService.getLaptops();
 
-  if (!res.ok) {
-    throw new Error('Error al cargar productos');
+      console.log(`✅ Encontradas ${laptops.length} laptops`);
+      setProducts(laptops);
+
+    } catch (err) {
+      console.error('❌ Error cargando laptops:', err);
+      setError(
+        'No se pudo conectar con el servidor. Verifica que el backend esté corriendo.'
+      );
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const subcategories = [
+    { label: 'Gaming', categoryId: 10 },
+    { label: 'Profesionales', categoryId: 11 }
+  ];
+
+  if (loading) {
+    return <LoadingScreen message="Cargando laptops..." />;
   }
 
-  const items = await res.json();
-
-  // 🔄 Adaptar backend → frontend
-  return items.map(item => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    description: item.description,
-    image: '/images/resources/feature1.png', // temporal
-    brand: 'TechZone', // temporal
-    category: 'laptops',
-    subcategory: 'general',
-  }));
-}
-
-async function getSubcategories() {
-  // por ahora fijo, luego viene de categories
-  return ['gaming', 'ultrabook', 'business', 'convertible'];
-}
-
-export default async function Laptops() {
-  const [products, subcategories] = await Promise.all([
-    getLaptops(),
-    getSubcategories(),
-  ]);
-
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      <ProductsLayout
-        title="Laptops"
-        products={products}
-        subcategories={subcategories}
-        category="laptops"
-      />
-    </Suspense>
+    <ProductsLayout
+      title="Laptops"
+      products={products}
+      subcategories={subcategories}
+      category="laptops"
+      isLoading={loading}
+      error={error}
+      onRetry={loadLaptops}
+    />
   );
 }

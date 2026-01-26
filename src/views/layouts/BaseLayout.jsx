@@ -1,4 +1,3 @@
-// src/views/layouts/BaseLayout.jsx
 'use client';
 
 import { useEffect } from "react";
@@ -9,7 +8,8 @@ import Footer from "@/views/components/Footer";
 import LoadingScreen from "@/views/components/LoadingScreen";
 
 const BaseLayout = ({ children, title = "TechZone" }) => {
-  const { user, isAdminOrStaff, loading } = useAuth();
+  // ✅ Usa isAdmin e isStaff que SÍ existen en el contexto
+  const { user, isAdmin, isStaff, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -19,13 +19,13 @@ const BaseLayout = ({ children, title = "TechZone" }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [title]);
 
-  // Redirigir admin/staff a panel de administración
+  // ✅ Usa isAdmin OR isStaff
   useEffect(() => {
-    if (!loading && user && isAdminOrStaff()) {
+    if (!loading && user && (isAdmin || isStaff)) {
       console.log("🔒 Admin/Staff detectado en ruta pública, redirigiendo a /admin");
       router.push("/admin");
     }
-  }, [user, loading, isAdminOrStaff, router]);
+  }, [user, loading, isAdmin, isStaff, router]);
 
   if (loading) {
     return <LoadingScreen />;

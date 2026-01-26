@@ -1,4 +1,3 @@
-// /src/app/layout.jsx
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClientProviders } from '@/components/ClientProviders';
@@ -15,7 +14,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Script para inicializar tema antes de que React cargue */}
         <Script
           id="theme-init"
           strategy="beforeInteractive"
