@@ -1,6 +1,6 @@
 // src/lib/api-client.js
 const API_BASE_URL = 
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/apis';
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 const DEFAULT_TIMEOUT = 8000;
 const DEFAULT_RETRIES = 2;

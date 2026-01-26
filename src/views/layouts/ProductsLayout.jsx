@@ -8,7 +8,7 @@ import ProductsSidebar from '@/views/components/products/ProductsSidebar';
 import ProductCard from '@/views/components/products/ProductCard';
 import { ROUTES } from "@/constants/routes";
 import { slugify } from '@/utils/slugify';
-import { useCartContext } from "@/models/context/CartContext";
+import { useCart } from "@/models/context/CartContext"; // ← CAMBIADO: useCartContext → useCart
 
 export default function ProductsLayout({ 
   title, 
@@ -16,7 +16,7 @@ export default function ProductsLayout({
   subcategories = [], 
   category 
 }) {
-  const { addToCart } = useCartContext();
+  const { addToCart } = useCart(); // ← CAMBIADO: useCartContext → useCart
   
   // Usar el hook de filtrado
   const filter = useProductsFilter(products, subcategories);
@@ -33,7 +33,7 @@ export default function ProductsLayout({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image || '/images/placeholder.jpg',
+      image: product.imageUrl || '/images/placeholder.jpg',
       quantity: cantidad,
       stock: product.stock || 10
     });

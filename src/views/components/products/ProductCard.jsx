@@ -24,9 +24,9 @@ export default function ProductCard({
         {/* Imagen */}
         <Link href={productUrl} className="md:w-1/4">
           <div className="relative h-48 md:h-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900">
-            {product.image ? (
+            {product.imageUrl? (
               <Image
-                src={product.image}
+                src={product.imageUrl}
                 alt={product.name}
                 fill
                 className="object-cover"
@@ -137,9 +137,9 @@ export default function ProductCard({
       {/* Imagen */}
       <Link href={productUrl} className="block">
         <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-900">
-          {product.image ? (
+          {product.imageUrl ? (
             <Image
-              src={product.image}
+              src={product.imageUrl}
               alt={product.name}
               fill
               className="object-cover group-hover:scale-110 transition-transform duration-500"

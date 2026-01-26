@@ -1,104 +1,99 @@
+// src/models/context/CartContext.jsx
 'use client';
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [totalItems, setTotalItems] = useState(0);
   const [cartOpen, setCartOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  // Cargar carrito local (sin API por ahora)
+  // Cargar carrito desde localStorage al iniciar
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const localCart = localStorage.getItem('guest_cart');
-      if (localCart) {
-        try {
-          const parsedCart = JSON.parse(localCart);
-          setCart(parsedCart);
-          setTotalItems(parsedCart.reduce((sum, item) => sum + item.quantity, 0));
-        } catch (error) {
-          console.error("Error parsing cart:", error);
-        }
+    const savedCart = localStorage.getItem('techzone_cart');
+    if (savedCart) {
+      try {
+        setCart(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+        localStorage.removeItem('techzone_cart');
       }
     }
   }, []);
 
-  const addToCart = async (productId, quantity = 1) => {
-    // Simulación local sin backend
-    console.log(`Añadiendo producto ${productId}, cantidad: ${quantity}`);
-    
-    const newItem = {
-      id: Date.now(),
-      productId,
-      quantity,
-      name: `Producto ${productId}`,
-      price: 99.99,
-      image: '/placeholder.jpg'
-    };
-    
-    const newCart = [...cart, newItem];
-    setCart(newCart);
-    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
-    
-    // Guardar en localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('guest_cart', JSON.stringify(newCart));
-    }
-    
-    return { success: true };
+  // Guardar carrito en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('techzone_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  // Agregar producto al carrito
+  const addToCart = (product, quantity = 1) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        // Si ya existe, actualizar cantidad
+        return prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        // Si no existe, agregar nuevo
+        return [...prevCart, {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image || '/placeholder-product.jpg',
+          quantity
+        }];
+      }
+    });
   };
 
-  const removeFromCart = async (productId) => {
-    const newCart = cart.filter(item => item.productId !== productId);
-    setCart(newCart);
-    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
-    
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('guest_cart', JSON.stringify(newCart));
-    }
-    
-    return { success: true };
+  // Actualizar cantidad de un producto
+  const updateQuantity = (productId, delta) => {
+    setCart(prevCart => {
+      return prevCart.map(item => {
+        if (item.id === productId) {
+          const newQuantity = item.quantity + delta;
+          if (newQuantity < 1) {
+            return item; // No permitir menos de 1
+          }
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+    });
   };
 
-  const updateQuantity = async (productId, quantity) => {
-    const newCart = cart.map(item => 
-      item.productId === productId ? { ...item, quantity } : item
-    );
-    setCart(newCart);
-    setTotalItems(newCart.reduce((sum, item) => sum + item.quantity, 0));
-    
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('guest_cart', JSON.stringify(newCart));
-    }
-    
-    return { success: true };
+  // Eliminar producto del carrito
+  const removeItem = (productId) => {
+    setCart(prevCart => prevCart.filter(item => item.id !== productId));
   };
 
-  const clearCart = async () => {
+  // Vaciar carrito
+  const emptyCart = () => {
     setCart([]);
-    setTotalItems(0);
-    
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('guest_cart');
-    }
-    
-    return { success: true };
   };
+
+  // Calcular total de items
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Calcular precio total
+  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const value = {
     cart,
-    totalItems,
     cartOpen,
     setCartOpen,
-    loading,
     addToCart,
-    removeFromCart,
     updateQuantity,
-    clearCart,
-    refreshCart: () => console.log("Refresh cart"),
+    removeItem,
+    emptyCart,
+    totalItems,
+    totalPrice
   };
 
   return (
@@ -108,10 +103,10 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export const useCartContext = () => {
+export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error("useCartContext debe usarse dentro de CartProvider");
+    throw new Error('useCart must be used within CartProvider');
   }
   return context;
 };

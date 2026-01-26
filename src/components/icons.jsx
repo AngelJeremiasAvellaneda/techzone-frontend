@@ -49,5 +49,11 @@ export {
   ChevronRight,
   Zap,
   Star,
-  TrendingUp
+  TrendingUp,
+  Award, 
+  Sparkles,
+  Cpu, 
+  Gamepad2, 
+  Monitor,
+  Smartphone
 } from 'lucide-react';

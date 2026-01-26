@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import CartDrawer from "./CartDrawer";
-import { useCartContext } from "@/models/context/CartContext";
+import { useCart } from "@/models/context/CartContext"; // ← CAMBIADO: useCartContext → useCart
 import { useAuth } from "@/models/context/AuthContext";
 import { useNotifications } from "@/models/hooks/useNotifications";
 import { useToast } from "@/models/hooks/useToast";
@@ -108,7 +108,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
   return (
     <div className={`p-3 border-b border-gray-200 dark:border-gray-800 ${isUnread ? 'bg-blue-50 dark:bg-blue-900/10' : ''}`}>
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-0.5">
+        <div className="shrink-0 mt-0.5">
           {getNotificationIcon(notification.type)}
         </div>
         <div className="flex-1 min-w-0">
@@ -138,7 +138,7 @@ const NotificationItem = ({ notification, onMarkAsRead }) => {
 };
 
 const Header = () => {
-  const { totalItems, cartOpen, setCartOpen } = useCartContext();
+  const { totalItems, cartOpen, setCartOpen } = useCart(); // ← CAMBIADO: useCartContext → useCart
   const { user, profile, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { showToast } = useToast();
@@ -291,7 +291,7 @@ const Header = () => {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 relative z-50">
 
           {/* LOGO */}
-          <Link href={ROUTES.HOME} className="text-2xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent hover:scale-105 transform transition-transform duration-300">
+          <Link href={ROUTES.HOME} className="text-2xl font-bold bg-linear-to-r from-indigo-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent hover:scale-105 transform transition-transform duration-300">
             TechZone
           </Link>
 
@@ -374,7 +374,7 @@ const Header = () => {
                   ref={notificationMenuRef}
                   className={`absolute right-0 mt-2 w-96 rounded-xl shadow-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transform transition-all duration-300 overflow-hidden z-50 ${notificationMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
                 >
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white">Notificaciones</h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -450,7 +450,7 @@ const Header = () => {
                   {profile?.avatar_url ? (
                     <img src={profile.avatar_url} className="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/50" alt={profile.full_name || 'Usuario'} />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center text-white text-sm font-bold">
+                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center text-white text-sm font-bold">
                       {getInitials(profile?.full_name)}
                     </div>
                   )}
@@ -465,7 +465,7 @@ const Header = () => {
                   ref={userMenuRef} 
                   className={`absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transform transition-all duration-300 overflow-hidden z-50 ${userMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}
                 >
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-fuchsia-50 dark:from-purple-900/20 dark:to-fuchsia-900/20">
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-linear-to-r from-purple-50 to-fuchsia-50 dark:from-purple-900/20 dark:to-fuchsia-900/20">
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">{profile?.full_name}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
                     {isAdminOrStaff() && (
@@ -531,7 +531,7 @@ const Header = () => {
                 <Link href={ROUTES.LOGIN} className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
                   <LogIn className="w-5 h-5" /> Iniciar Sesión
                 </Link>
-                <Link href={ROUTES.REGISTER} className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white hover:opacity-90 transition">
+                <Link href={ROUTES.REGISTER} className="flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-purple-500 to-fuchsia-500 text-white hover:opacity-90 transition">
                   <UserPlus className="w-5 h-5" /> Registrarse
                 </Link>
               </div>
@@ -579,7 +579,7 @@ const Header = () => {
                 {profile?.avatar_url ? (
                   <img src={profile.avatar_url} alt={profile.full_name || 'Usuario'} className="w-7 h-7 rounded-full object-cover ring-2 ring-purple-500/50" />
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-7 h-7 rounded-full bg-linear-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center text-white text-xs font-bold">
                     {getInitials(profile?.full_name)}
                   </div>
                 )}
@@ -660,231 +660,230 @@ const Header = () => {
                           {notification.message}
                         </p>
                         {!notification.read && (
-                          <button
-                            onClick={() => handleMarkAsRead(notification.id)}
-                            className="text-xs text-blue-600 dark:text-blue-400 mt-2"
-                          >
-                            Marcar como leído
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    
-                    {notifications.length > 5 && (
-                      <Link
-                        href={ROUTES.ACCOUNT_TAB('notifications')}
-                        className="block text-center text-sm text-purple-600 dark:text-purple-400 py-2 border-t border-gray-200 dark:border-gray-700"
-                        onClick={() => {
-                          setMobileOpen(false);
-                          setMobileNotificationMenuOpen(false);
-                        }}
+                      <button
+                        onClick={() => handleMarkAsRead(notification.id)}
+                        className="text-xs text-blue-600 dark:text-blue-400 mt-2"
                       >
-                        Ver todas las notificaciones
-                      </Link>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Usuario móvil */}
-            {user && (
-              <div className="mb-4">
-                <button 
-                  className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                  onClick={() => {
-                    setMobileUserMenuOpen(prev => !prev);
-                    setMobileNotificationMenuOpen(false);
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    {profile?.avatar_url ? (
-                      <img src={profile.avatar_url} className="w-10 h-10 rounded-full object-cover ring-2 ring-purple-500/50" alt={profile.full_name || 'Usuario'} />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 text-white font-bold flex items-center justify-center">
-                        {getInitials(profile?.full_name)}
-                      </div>
-                    )}
-                    <div className="text-left">
-                      <span className="block font-medium text-gray-900 dark:text-white">
-                        {profile?.full_name || "Usuario"}
-                      </span>
-                      {isAdminOrStaff() && (
-                        <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full">
-                          {profile?.role === 'admin' ? 'Admin' : 'Staff'}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${mobileUserMenuOpen ? "rotate-180" : ""}`} />
-                </button>
-
-                {mobileUserMenuOpen && (
-                  <div className="ml-4 mt-2 flex flex-col space-y-2">
-                    <Link 
-                      href={ROUTES.ACCOUNT} 
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        setMobileUserMenuOpen(false);
-                      }}
-                    >
-                      <Settings className="w-5 h-5 text-purple-500" /> Mi Cuenta
-                    </Link>
-                    <Link 
-                      href={ROUTES.ACCOUNT_TAB('orders')} 
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        setMobileUserMenuOpen(false);
-                      }}
-                    >
-                      <Package className="w-5 h-5 text-blue-500" /> Mis Pedidos
-                    </Link>
-                    <Link 
-                      href={ROUTES.ACCOUNT_TAB('wishlist')} 
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        setMobileUserMenuOpen(false);
-                      }}
-                    >
-                      <Heart className="w-5 h-5 text-red-500" /> Lista de Deseos
-                    </Link>
-                    <Link 
-                      href={ROUTES.ACCOUNT_TAB('addresses')} 
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        setMobileUserMenuOpen(false);
-                      }}
-                    >
-                      <MapPin className="w-5 h-5 text-green-500" /> Direcciones
-                    </Link>
-                    
-                    {isAdminOrStaff() && (
-                      <Link 
-                        href={ROUTES.ADMIN}
-                        className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                        onClick={() => {
-                          setMobileOpen(false);
-                          setMobileUserMenuOpen(false);
-                        }}
-                      >
-                        <Shield className="w-5 h-5 text-fuchsia-500" /> 
-                        <span>Panel de Administración</span>
-                      </Link>
-                    )}
-                    
-                    <button 
-                      onClick={handleSignOut} 
-                      className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-                    >
-                      <LogOut className="w-5 h-5" /> Cerrar Sesión
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Enlaces principales */}
-            {mainNav.map((item) => {
-              const Icon = item.icon;
-              
-              return (
-                <div key={item.path}>
-                  {item.submenu ? (
-                    <div className="flex flex-col">
-                      <button 
-                        className="flex items-center justify-between w-full px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                        onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
-                      >
-                        <span className="flex items-center">
-                          {Icon && <Icon className="w-5 h-5 mr-2" />}
-                          <span>{item.label}</span>
-                        </span>
-                        <ChevronDown className={`w-5 h-5 transition-transform ${mobileSubmenuOpen ? "rotate-180" : ""}`} />
+                        Marcar como leído
                       </button>
+                    )}
+                  </div>
+                ))}
+                
+                {notifications.length > 5 && (
+                  <Link
+                    href={ROUTES.ACCOUNT_TAB('notifications')}
+                    className="block text-center text-sm text-purple-600 dark:text-purple-400 py-2 border-t border-gray-200 dark:border-gray-700"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      setMobileNotificationMenuOpen(false);
+                    }}
+                  >
+                    Ver todas las notificaciones
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
-                      {mobileSubmenuOpen && (
-                        <div className="ml-6 mt-2 flex flex-col space-y-2">
-                          {item.submenu.map((subItem) => (
-                            <Link 
-                              key={subItem.path} 
-                              href={subItem.path} 
-                              className="px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
-                              onClick={() => {
-                                setMobileOpen(false);
-                                setMobileSubmenuOpen(false);
-                              }}
-                            >
-                              <div className="font-medium">{subItem.label}</div>
-                              {subItem.description && (
-                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{subItem.description}</p>
-                              )}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Link 
-                      href={item.path}
-                      className="flex items-center px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {Icon && <Icon className="w-5 h-5 mr-2" />}
-                      <span>{item.label}</span>
-                    </Link>
+        {/* Usuario móvil */}
+        {user && (
+          <div className="mb-4">
+            <button 
+              className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              onClick={() => {
+                setMobileUserMenuOpen(prev => !prev);
+                setMobileNotificationMenuOpen(false);
+              }}
+            >
+              <div className="flex items-center gap-3">
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} className="w-10 h-10 rounded-full object-cover ring-2 ring-purple-500/50" alt={profile.full_name || 'Usuario'} />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-fuchsia-500 text-white font-bold flex items-center justify-center">
+                    {getInitials(profile?.full_name)}
+                  </div>
+                )}
+                <div className="text-left">
+                  <span className="block font-medium text-gray-900 dark:text-white">
+                    {profile?.full_name || "Usuario"}
+                  </span>
+                  {isAdminOrStaff() && (
+                    <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full">
+                      {profile?.role === 'admin' ? 'Admin' : 'Staff'}
+                    </span>
                   )}
                 </div>
-              );
-            })}
+              </div>
+              <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${mobileUserMenuOpen ? "rotate-180" : ""}`} />
+            </button>
 
-            {/* Si no está logueado, mostrar opciones de login */}
-            {!user && (
-              <>
+            {mobileUserMenuOpen && (
+              <div className="ml-4 mt-2 flex flex-col space-y-2">
                 <Link 
-                  href={ROUTES.LOGIN} 
-                  className="px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition flex items-center"
-                  onClick={() => setMobileOpen(false)}
+                  href={ROUTES.ACCOUNT} 
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setMobileUserMenuOpen(false);
+                  }}
                 >
-                  <LogIn className="w-5 h-5 mr-2" /> 
-                  <span>Iniciar Sesión</span>
+                  <Settings className="w-5 h-5 text-purple-500" /> Mi Cuenta
                 </Link>
                 <Link 
-                  href={ROUTES.REGISTER} 
-                  className="px-4 py-3 text-lg font-medium text-white rounded-lg bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:opacity-90 transition flex items-center justify-center"
-                  onClick={() => setMobileOpen(false)}
+                  href={ROUTES.ACCOUNT_TAB('orders')} 
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setMobileUserMenuOpen(false);
+                  }}
                 >
-                  <UserPlus className="w-5 h-5 mr-2" /> 
-                  <span>Registrarse</span>
+                  <Package className="w-5 h-5 text-blue-500" /> Mis Pedidos
                 </Link>
-              </>
-            )}
-
-            {/* Tema */}
-            <div className="flex justify-center mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-              <button 
-                onClick={toggleTheme} 
-                className="p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-                aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-              >
-                {theme === "dark" ? (
-                  <Sun className="w-6 h-6 text-yellow-400" />
-                ) : (
-                  <Moon className="w-6 h-6 text-indigo-400" />
+                <Link 
+                  href={ROUTES.ACCOUNT_TAB('wishlist')} 
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setMobileUserMenuOpen(false);
+                  }}
+                >
+                  <Heart className="w-5 h-5 text-red-500" /> Lista de Deseos
+                </Link>
+                <Link 
+                  href={ROUTES.ACCOUNT_TAB('addresses')} 
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setMobileUserMenuOpen(false);
+                  }}
+                >
+                  <MapPin className="w-5 h-5 text-green-500" /> Direcciones
+                </Link>
+                
+                {isAdminOrStaff() && (
+                  <Link 
+                    href={ROUTES.ADMIN}
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      setMobileUserMenuOpen(false);
+                    }}
+                  >
+                    <Shield className="w-5 h-5 text-fuchsia-500" /> 
+                    <span>Panel de Administración</span>
+                  </Link>
                 )}
-              </button>
-            </div>
-
+                
+                <button 
+                  onClick={handleSignOut} 
+                  className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                >
+                  <LogOut className="w-5 h-5" /> Cerrar Sesión
+                </button>
+              </div>
+            )}
           </div>
-        </div>
-      </header>
+        )}
 
-      <CartDrawer open={cartOpen} setOpen={setCartOpen} />
-    </>
-  );
+        {/* Enlaces principales */}
+        {mainNav.map((item) => {
+          const Icon = item.icon;
+          
+          return (
+            <div key={item.path}>
+              {item.submenu ? (
+                <div className="flex flex-col">
+                  <button 
+                    className="flex items-center justify-between w-full px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    onClick={() => setMobileSubmenuOpen(!mobileSubmenuOpen)}
+                  >
+                    <span className="flex items-center">
+                      {Icon && <Icon className="w-5 h-5 mr-2" />}
+                      <span>{item.label}</span>
+                    </span>
+                    <ChevronDown className={`w-5 h-5 transition-transform ${mobileSubmenuOpen ? "rotate-180" : ""}`} />
+                  </button>
+
+                  {mobileSubmenuOpen && (
+                    <div className="ml-6 mt-2 flex flex-col space-y-2">
+                      {item.submenu.map((subItem) => (
+                        <Link 
+                          key={subItem.path} 
+                          href={subItem.path} 
+                          className="px-4 py-2 text-gray-700 dark:text-gray-300 rounded hover:bg-purple-50 dark:hover:bg-purple-900/20 transition"
+                          onClick={() => {
+                            setMobileOpen(false);
+                            setMobileSubmenuOpen(false);
+                          }}
+                        >
+                          <div className="font-medium">{subItem.label}</div>
+                          {subItem.description && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{subItem.description}</p>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link 
+                  href={item.path}
+                  className="flex items-center px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {Icon && <Icon className="w-5 h-5 mr-2" />}
+                  <span>{item.label}</span>
+                </Link>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Si no está logueado, mostrar opciones de login */}
+        {!user && (
+          <>
+            <Link 
+              href={ROUTES.LOGIN} 
+              className="px-4 py-3 text-lg font-medium text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition flex items-center"
+              onClick={() => setMobileOpen(false)}
+            >
+              <LogIn className="w-5 h-5 mr-2" /> 
+              <span>Iniciar Sesión</span>
+            </Link>
+            <Link 
+              href={ROUTES.REGISTER} 
+              className="px-4 py-3 text-lg font-medium text-white rounded-lg bg-linear-to-r from-purple-500 to-fuchsia-500 hover:opacity-90 transition flex items-center justify-center"
+              onClick={() => setMobileOpen(false)}
+            >
+              <UserPlus className="w-5 h-5 mr-2" /> 
+              <span>Registrarse</span>
+            </Link>
+          </>
+        )}
+
+        {/* Tema */}
+        <div className="flex justify-center mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+          <button 
+            onClick={toggleTheme} 
+            className="p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+          >
+            {theme === "dark" ? (
+              <Sun className="w-6 h-6 text-yellow-400" />
+            ) : (
+              <Moon className="w-6 h-6 text-indigo-400" />
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <CartDrawer open={cartOpen} setOpen={setCartOpen} />
+</>
+);
 };
 
 export default Header;

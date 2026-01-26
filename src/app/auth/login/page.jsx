@@ -82,7 +82,7 @@ const Login = () => {
             <Link href={ROUTES.HOME}>
               <div className="flex justify-center items-center gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity">
                 <ShoppingBag className="w-10 h-10 text-purple-600" />
-                <span className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-fuchsia-600 text-transparent bg-clip-text">
+                <span className="text-3xl font-bold bg-linear-to-r from-purple-600 to-fuchsia-600 text-transparent bg-clip-text">
                   TechZone
                 </span>
               </div>
@@ -98,7 +98,7 @@ const Login = () => {
           <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-xl">
             {error && (
               <div className="flex gap-2 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg text-red-600 dark:text-red-400 text-sm mb-4">
-                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
@@ -153,7 +153,7 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-linear-to-r from-purple-600 to-fuchsia-600 text-white rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

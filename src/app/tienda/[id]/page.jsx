@@ -11,7 +11,7 @@ import DesktopZoomLens from "@/views/components/DesktopZoomLens";
 import ProductReviews from "@/views/components/ProductReviews";
 import Slider from "react-slick";
 import { ShoppingCart, Heart, Share2, Expand, ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { useCartContext } from "@/models/context/CartContext";
+import { useCart} from "@/models/context/CartContext";
 import { ROUTES } from "@/constants/routes";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -89,7 +89,7 @@ export default function ProductDetail() {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
   
-  const { addToCart, setCartOpen } = useCartContext();
+  const { addToCart, setCartOpen } = useCart();
 
   const [product, setProduct] = useState(null);
   const [imagenSeleccionada, setImagenSeleccionada] = useState("");
